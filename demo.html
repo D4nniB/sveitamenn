@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sveitamenn — Hljómsveitin</title>
+  <meta name="description" content="Hljómsveitin Sveitamenn — Tónlist fyrir brúðkaup, árshátíðir, afmæli og sveitaböll.">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:           #000000;
+      --surface:      #0e0e0e;
+      --surface-2:    #181818;
+      --border:       #222222;
+      --border-light: #333333;
+      --white:        #ffffff;
+      --silver:       #c0c0c0;
+      --silver-mid:   #888888;
+      --silver-dark:  #555555;
+      --nav-h:        68px;
+      --f-display:    'Bebas Neue', Impact, sans-serif;
+      --f-sub:        'Oswald', sans-serif;
+      --f-body:       'Inter', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--f-body);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* LANGUAGE SYSTEM */
+    .is-text, .en-text { display: none; }
+    html[lang="is"] .is-text { display: inline; }
+    html[lang="en"] .en-text { display: inline; }
+    html[lang="is"] p.is-text,
+    html[lang="is"] div.is-text { display: block; }
+    html[lang="en"] p.en-text,
+    html[lang="en"] div.en-text { display: block; }
+
+    /* NAV */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .nav.scrolled {
+      background: rgba(0,0,0,0.95);
+      border-color: var(--border);
+    }
+    .nav-logo img { height: 42px; width: auto; }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--f-sub);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--silver-mid);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      font-family: var(--f-sub);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+    }
+    .lang-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.2rem 0.35rem;
+      color: var(--silver-dark);
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: 600;
+      letter-spacing: inherit;
+      transition: color 0.2s;
+    }
+    .lang-btn.active { color: var(--white); }
+    .lang-btn:hover { color: var(--silver); }
+    .lang-sep { color: var(--silver-dark); font-weight: 300; }
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-burger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--silver);
+      transition: all 0.3s;
+    }
+    .nav-burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      background: rgba(0,0,0,0.97);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2.5rem 2rem;
+      z-index: 199;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 1.25rem; }
+    .mobile-menu a {
+      font-family: var(--f-sub);
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--silver);
+    }
+
+    /* HERO */
+    .hero { padding-top: var(--nav-h); background: var(--bg); }
+    .hero-photo {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 851 / 315;
+      background: url('header.jpg') center / cover no-repeat;
+    }
+    .hero-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.05) 60%, rgba(0,0,0,0.55) 85%, #000 100%);
+    }
+    .hero-inner {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 2rem 4.5rem;
+      margin-top: max(-16rem, -14vw);
+    }
+    .hero-burst {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.03;
+      transform-origin: 50% 50%;
+      animation: rotateBurst 55s linear infinite;
+      background: conic-gradient(
+        from 0deg at 50% 50%,
+        transparent 0deg, rgba(255,255,255,0.9) 1deg, transparent 2deg,
+        transparent 9deg, rgba(255,255,255,0.9) 10deg, transparent 11deg,
+        transparent 18deg, rgba(255,255,255,0.9) 19deg, transparent 20deg,
+        transparent 27deg, rgba(255,255,255,0.9) 28deg, transparent 29deg,
+        transparent 36deg, rgba(255,255,255,0.9) 37deg, transparent 38deg,
+        transparent 45deg, rgba(255,255,255,0.9) 46deg, transparent 47deg,
+        transparent 54deg, rgba(255,255,255,0.9) 55deg, transparent 56deg,
+        transparent 63deg, rgba(255,255,255,0.9) 64deg, transparent 65deg,
+        transparent 72deg, rgba(255,255,255,0.9) 73deg, transparent 74deg,
+        transparent 81deg, rgba(255,255,255,0.9) 82deg, transparent 83deg,
+        transparent 90deg, rgba(255,255,255,0.9) 91deg, transparent 92deg,
+        transparent 99deg, rgba(255,255,255,0.9) 100deg, transparent 101deg,
+        transparent 108deg, rgba(255,255,255,0.9) 109deg, transparent 110deg,
+        transparent 117deg, rgba(255,255,255,0.9) 118deg, transparent 119deg,
+        transparent 126deg, rgba(255,255,255,0.9) 127deg, transparent 128deg,
+        transparent 135deg, rgba(255,255,255,0.9) 136deg, transparent 137deg,
+        transparent 144deg, rgba(255,255,255,0.9) 145deg, transparent 146deg,
+        transparent 153deg, rgba(255,255,255,0.9) 154deg, transparent 155deg,
+        transparent 162deg, rgba(255,255,255,0.9) 163deg, transparent 164deg,
+        transparent 171deg, rgba(255,255,255,0.9) 172deg, transparent 173deg,
+        transparent 180deg, rgba(255,255,255,0.9) 181deg, transparent 182deg,
+        transparent 189deg, rgba(255,255,255,0.9) 190deg, transparent 191deg,
+        transparent 198deg, rgba(255,255,255,0.9) 199deg, transparent 200deg,
+        transparent 207deg, rgba(255,255,255,0.9) 208deg, transparent 209deg,
+        transparent 216deg, rgba(255,255,255,0.9) 217deg, transparent 218deg,
+        transparent 225deg, rgba(255,255,255,0.9) 226deg, transparent 227deg,
+        transparent 234deg, rgba(255,255,255,0.9) 235deg, transparent 236deg,
+        transparent 243deg, rgba(255,255,255,0.9) 244deg, transparent 245deg,
+        transparent 252deg, rgba(255,255,255,0.9) 253deg, transparent 254deg,
+        transparent 261deg, rgba(255,255,255,0.9) 262deg, transparent 263deg,
+        transparent 270deg, rgba(255,255,255,0.9) 271deg, transparent 272deg,
+        transparent 279deg, rgba(255,255,255,0.9) 280deg, transparent 281deg,
+        transparent 288deg, rgba(255,255,255,0.9) 289deg, transparent 290deg,
+        transparent 297deg, rgba(255,255,255,0.9) 298deg, transparent 299deg,
+        transparent 306deg, rgba(255,255,255,0.9) 307deg, transparent 308deg,
+        transparent 315deg, rgba(255,255,255,0.9) 316deg, transparent 317deg,
+        transparent 324deg, rgba(255,255,255,0.9) 325deg, transparent 326deg,
+        transparent 333deg, rgba(255,255,255,0.9) 334deg, transparent 335deg,
+        transparent 342deg, rgba(255,255,255,0.9) 343deg, transparent 344deg,
+        transparent 351deg, rgba(255,255,255,0.9) 352deg, transparent 353deg,
+        transparent 360deg
+      );
+    }
+    .hero-logo {
+      position: relative;
+      z-index: 1;
+      width: min(260px, 52vw);
+      filter: drop-shadow(0 0 60px rgba(255,255,255,0.12));
+      animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+      margin-bottom: 2.25rem;
+      will-change: transform;
+    }
+    .hero-tagline {
+      font-family: var(--f-sub);
+      font-weight: 300;
+      font-size: clamp(0.72rem, 1.6vw, 0.95rem);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 1.75rem;
+      animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+    }
+    .hero-events {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 0.75rem;
+      margin-bottom: 2.75rem;
+      animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+    }
+    .hero-event {
+      font-family: var(--f-sub);
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      padding: 0.3rem 0.75rem;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .hero-cta {
+      display: inline-block;
+      font-family: var(--f-sub);
+      font-weight: 500;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 2.75rem;
+      border: 1px solid rgba(255,255,255,0.5);
+      color: var(--white);
+      transition: all 0.28s;
+      animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.75s both;
+    }
+    .hero-cta:hover { background: var(--white); color: var(--bg); border-color: var(--white); }
+
+    /* SECTION SCAFFOLD */
+    section { padding: 5.5rem 2rem; scroll-margin-top: var(--nav-h); }
+    .container { max-width: 1080px; margin: 0 auto; }
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      font-family: var(--f-sub);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--silver-dark);
+      margin-bottom: 0.9rem;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--silver-dark);
+      flex-shrink: 0;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s ease 0.2s;
+    }
+    .section-eyebrow.line-visible::before { transform: scaleX(1); }
+    .section-title {
+      font-family: var(--f-display);
+      font-size: clamp(2.8rem, 6.5vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      margin-bottom: 2.25rem;
+    }
+    .section-title-inner { display: block; }
+
+    /* ABOUT */
+    #about {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .about-content { max-width: 680px; }
+    .about-body p {
+      color: var(--silver);
+      font-weight: 300;
+      font-size: 1.05rem;
+      line-height: 1.85;
+      margin-bottom: 1.3rem;
+    }
+    .about-body p:last-child { margin-bottom: 0; }
+
+    /* MEMBERS */
+    #members { background: var(--bg); }
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      margin-top: 3rem;
+      border: 1px solid var(--border);
+      gap: 1px;
+      background: var(--border);
+    }
+    .member-card {
+      background: var(--bg);
+      padding: 2.25rem 1.25rem 2rem;
+      text-align: center;
+      transition: background 0.25s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .member-card:hover { background: var(--surface-2); transform: translateY(-4px); }
+    .member-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--surface-2);
+      border: 1px solid var(--border-light);
+      margin: 0 auto 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: var(--f-display);
+      font-size: 1.8rem;
+      color: var(--silver-dark);
+      transition: border-color 0.3s;
+    }
+    .member-card:hover .member-avatar { border-color: var(--silver-mid); }
+    .member-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .member-name {
+      font-family: var(--f-sub);
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--white);
+      line-height: 1.35;
+      margin-bottom: 0.85rem;
+    }
+    .member-instrument {
+      display: inline-block;
+      font-family: var(--f-sub);
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--silver-mid);
+      padding: 0.2rem 0.55rem;
+      border: 1px solid var(--border-light);
+      line-height: 1.6;
+    }
+
+    /* GALLERY */
+    #gallery {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .gallery-grid {
+      columns: 3;
+      column-gap: 4px;
+      margin-top: 3rem;
+    }
+    .gallery-item {
+      background: var(--surface-2);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border);
+      margin-bottom: 4px;
+      break-inside: avoid;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: grayscale(20%);
+      transition: transform 0.55s ease, filter 0.55s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.06); filter: grayscale(0%); }
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.04);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .gallery-item:hover::after { opacity: 1; }
+    .gallery-note {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--silver-dark);
+      font-family: var(--f-sub);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* VIDEO */
+    #video { background: var(--bg); }
+    .video-rows { display: flex; flex-direction: column; gap: 4px; margin-top: 3rem; }
+    .video-row { display: flex; gap: 4px; }
+    .video-embed {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .video-embed iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .video-embed.r-169  { aspect-ratio: 560 / 314; flex-grow: 1.783; }
+    .video-embed.r-171  { aspect-ratio: 560 / 328; flex-grow: 1.707; }
+    .video-embed.r-916  { aspect-ratio: 267 / 476; flex-grow: 0.561; }
+
+    /* CONTACT */
+    #contact { background: var(--bg); text-align: center; }
+    .contact-inner { max-width: 580px; margin: 0 auto; }
+    .contact-body {
+      color: var(--silver-mid);
+      font-weight: 300;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 2.75rem;
+    }
+    .contact-email {
+      display: inline-block;
+      font-family: var(--f-display);
+      font-size: clamp(1.2rem, 3.5vw, 2rem);
+      letter-spacing: 0.1em;
+      color: var(--white);
+      padding: 0.7rem 2rem;
+      border: 1px solid var(--border-light);
+      transition: all 0.28s;
+      margin-bottom: 3rem;
+    }
+    .contact-email:hover { background: var(--white); color: var(--bg); border-color: var(--white); }
+    .contact-socials { display: flex; justify-content: center; gap: 2.5rem; }
+    .social-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--silver-dark);
+      transition: color 0.2s;
+    }
+    .social-link:hover { color: var(--white); }
+    .social-link svg { width: 22px; height: 22px; }
+    .social-label {
+      font-family: var(--f-sub);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .footer-logo img { height: 38px; margin: 0 auto 1rem; }
+    .footer-copy { font-size: 0.72rem; color: var(--silver-dark); font-family: var(--f-sub); letter-spacing: 0.08em; }
+
+    /* KEYFRAMES */
+    @keyframes rotateBurst { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes heroFadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ANIMATE-IN */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease var(--stagger, 0s),
+                  transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) var(--stagger, 0s);
+    }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-burger { display: flex; }
+      .members-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 640px) {
+      section { padding: 3.75rem 1.25rem; }
+      .nav { padding: 0 1.25rem; }
+      .nav-logo img { height: 36px; }
+      .nav-burger { padding: 10px; margin-right: -10px; }
+      .mobile-menu { padding: 1.5rem 1.25rem 2rem; }
+      .hero-inner { padding: 3rem 1.25rem 3.5rem; }
+      .hero-logo { width: min(200px, 58vw); margin-bottom: 1.75rem; }
+      .hero-tagline { margin-bottom: 1.25rem; }
+      .hero-events { margin-bottom: 2.25rem; }
+      .members-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid { columns: 2; }
+      .video-row { flex-direction: column; }
+      .video-embed.r-916 { max-width: 340px; margin: 0 auto; width: 100%; }
+      .contact-email { padding: 0.7rem 1.25rem; letter-spacing: 0.06em; }
+      .contact-socials { gap: 2rem; }
+    }
+    @media (max-width: 400px) {
+      .members-grid { grid-template-columns: 1fr; }
+      .gallery-grid { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="main-nav">
+  <a href="#" class="nav-logo">
+    <img src="logo_small.png" alt="Sveitamenn">
+  </a>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-is" onclick="setLang('is')">IS</button>
+      <span class="lang-sep">/</span>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-photo"></div>
+  <div class="hero-inner">
+    <div class="hero-burst"></div>
+    <img src="logo.png" alt="Hljómsveitin Sveitamenn" class="hero-logo">
+    <p class="hero-tagline">
+      <span class="is-text">Tónlist fyrir sérstakar stundir</span>
+      <span class="en-text">Music for special occasions</span>
+    </p>
+    <div class="hero-events">
+      <span class="hero-event"><span class="is-text">Brúðkaup</span><span class="en-text">Weddings</span></span>
+      <span class="hero-event"><span class="is-text">Árshátíðir</span><span class="en-text">Annual parties</span></span>
+      <span class="hero-event"><span class="is-text">Afmæli</span><span class="en-text">Birthdays</span></span>
+      <span class="hero-event"><span class="is-text">Sveitaböll</span><span class="en-text">Country dances</span></span>
+    </div>
+    <a href="#contact" class="hero-cta">
+      <span class="is-text">Bókaðu okkur</span>
+      <span class="en-text">Book us</span>
+    </a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-content">
+      <div>
+        <div class="section-eyebrow">
+          <span class="is-text">Um okkur</span>
+          <span class="en-text">About us</span>
+        </div>
+        <h2 class="section-title">
+          <span class="section-title-inner">
+            <span class="is-text">Hljómsveitin</span>
+            <span class="en-text">The Band</span>
+          </span>
+        </h2>
+        <div class="about-body">
+          <p class="is-text">
+            Hljómsveitin Sveitamenn er fimm manna sveit sem hefur gleði og góðar minningar að leiðarljósi. Við sérhæfum okkur í að spila í brúðkaupum, á árshátíðum, afmælum, sveitaböllum og öllum öðrum veislum þar sem lifandi tónlist gerir kvöldið ógleymanlegt.
+          </p>
+          <p class="en-text">
+            Sveitamenn is a five-piece band dedicated to creating joy and lasting memories. We specialise in performing at weddings, annual parties, birthdays, country dances and all kinds of events where live music makes the night unforgettable.
+          </p>
+          <p class="is-text">
+            Með gítar, bassa, trommur, hljómborð og söng — og fullt af spilagleði — erum við alltaf tilbúnir að halda dansgólfinu fullu fram á nótt.
+          </p>
+          <p class="en-text">
+            With guitar, bass, drums, keys and vocals — and a generous dose of passion — we are always ready to keep the dance floor full all night.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERS -->
+<section id="members">
+  <div class="container">
+    <div class="section-eyebrow">
+      <span class="is-text">Meðlimir</span>
+      <span class="en-text">The members</span>
+    </div>
+    <h2 class="section-title">
+      <span class="section-title-inner">
+        <span class="is-text">Sveitin</span>
+        <span class="en-text">The Band</span>
+      </span>
+    </h2>
+    <div class="members-grid">
+
+      <div class="member-card fade-up">
+        <div class="member-avatar"><img src="photos/member_03.jpg" alt="Hjálmar"></div>
+        <div class="member-name">Hjálmar</div>
+        <span class="member-instrument">
+          <span class="is-text">Söngvari · Gítar</span>
+          <span class="en-text">Vocals · Guitar</span>
+        </span>
+      </div>
+
+      <div class="member-card fade-up">
+        <div class="member-avatar"><img src="photos/member_02.jpg" alt="Eyþór Ingi"></div>
+        <div class="member-name">Eyþór Ingi</div>
+        <span class="member-instrument">
+          <span class="is-text">Rafgítar</span>
+          <span class="en-text">Electric Guitar</span>
+        </span>
+      </div>
+
+      <div class="member-card fade-up">
+        <div class="member-avatar"><img src="photos/member_01.jpg" alt="Hörður Alexander"></div>
+        <div class="member-name">Hörður Alexander</div>
+        <span class="member-instrument">
+          <span class="is-text">Hljómborð</span>
+          <span class="en-text">Keys</span>
+        </span>
+      </div>
+
+      <div class="member-card fade-up">
+        <div class="member-avatar"><img src="photos/member_05.jpg" alt="Ragnar Þorri"></div>
+        <div class="member-name">Ragnar Þorri</div>
+        <span class="member-instrument">
+          <span class="is-text">Bassagítar</span>
+          <span class="en-text">Bass Guitar</span>
+        </span>
+      </div>
+
+      <div class="member-card fade-up">
+        <div class="member-avatar"><img src="photos/member_04.jpg" alt="Guðmundur Bjarnason"></div>
+        <div class="member-name">Guðmundur Bjarnason</div>
+        <span class="member-instrument">
+          <span class="is-text">Trommur</span>
+          <span class="en-text">Drums</span>
+        </span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-eyebrow">
+      <span class="is-text">Myndir</span>
+      <span class="en-text">Photos</span>
+    </div>
+    <h2 class="section-title">
+      <span class="section-title-inner">
+        <span class="is-text">Myndasafn</span>
+        <span class="en-text">Gallery</span>
+      </span>
+    </h2>
+    <div class="gallery-grid">
+      <div class="gallery-item fade-up">
+        <img src="photos/gallery_01.jpg" alt="Sveitamenn — hljómsveitarmynd" loading="lazy">
+      </div>
+      <div class="gallery-item fade-up">
+        <img src="photos/gallery_03.jpg" alt="Sveitamenn á sviði" loading="lazy">
+      </div>
+      <div class="gallery-item fade-up">
+        <img src="photos/gallery_04.jpg" alt="Sveitamenn á sviði" loading="lazy">
+      </div>
+      <div class="gallery-item fade-up">
+        <img src="photos/gallery_02.jpg" alt="Sveitamenn á sviði" loading="lazy">
+      </div>
+      <div class="gallery-item fade-up">
+        <img src="photos/gallery_07.jpg" alt="Sveitamenn á sviði — séð aftan frá trommusettinu" loading="lazy">
+      </div>
+      <div class="gallery-item fade-up">
+        <img src="photos/gallery_05.jpg" alt="Sveitamenn" loading="lazy">
+      </div>
+      <div class="gallery-item fade-up">
+        <img src="photos/gallery_06.jpg" alt="Dansgólfið á balli með Sveitamönnum" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section id="video">
+  <div class="container">
+    <div class="section-eyebrow">
+      <span class="is-text">Sjáðu okkur á sviði</span>
+      <span class="en-text">See us in action</span>
+    </div>
+    <h2 class="section-title">
+      <span class="section-title-inner">
+        <span class="is-text">Myndbönd</span>
+        <span class="en-text">Videos</span>
+      </span>
+    </h2>
+    <div class="video-rows">
+      <div class="video-row">
+        <div class="video-embed r-171">
+          <iframe data-src="https://www.facebook.com/plugins/video.php?height=328&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1064160200103371%2F&show_text=false&width=560&t=0&autoplay=true" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="Sveitamenn — auglýsing"></iframe>
+        </div>
+        <div class="video-embed r-916">
+          <iframe data-src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F786171484526403%2F&show_text=false&width=267&t=0&autoplay=true" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="Sveitamenn — komdu með á ball"></iframe>
+        </div>
+      </div>
+      <div class="video-row">
+        <div class="video-embed r-916">
+          <iframe data-src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F955772730462746%2F&show_text=false&width=267&t=0&autoplay=true" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="Sveitamenn — auglýsing"></iframe>
+        </div>
+        <div class="video-embed r-169">
+          <iframe data-src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2F100063765379489%2Fvideos%2F239756468913364%2F&show_text=false&width=560&t=0&autoplay=true" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="Sveitamenn — hraðupptaka frá balli"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <div class="section-eyebrow" style="justify-content:center;">
+        <span class="is-text">Bókun</span>
+        <span class="en-text">Booking</span>
+      </div>
+      <h2 class="section-title">
+        <span class="section-title-inner">
+          <span class="is-text">Hafa samband</span>
+          <span class="en-text">Get in touch</span>
+        </span>
+      </h2>
+      <p class="contact-body is-text">
+        Hafðu samband við okkur til að fá frekari upplýsingar eða til að bóka Sveitamenn á viðburðinn þinn.
+      </p>
+      <p class="contact-body en-text">
+        Get in touch for more information or to book Sveitamenn for your event.
+      </p>
+      <!-- Skipta út fyrir raunverulegt netfang/síma -->
+      <a href="mailto:info@sveitamenn.is" class="contact-email">info@sveitamenn.is</a>
+      <div class="contact-socials">
+        <a href="https://www.facebook.com/hljomsveitin.sveitamenn/" target="_blank" rel="noopener" class="social-link">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+          <span class="social-label">Facebook</span>
+        </a>
+        <a href="https://www.instagram.com/sveitamenn/" target="_blank" rel="noopener" class="social-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+          <span class="social-label">Instagram</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="logo_small.png" alt="Sveitamenn">
+  </div>
+  <p class="footer-copy">&copy; 2026 Hljómsveitin Sveitamenn &nbsp;&middot;&nbsp; sveitamenn.is</p>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.documentElement.lang = lang;
+    document.getElementById('btn-is').classList.toggle('active', lang === 'is');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  }
+  var nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', function() {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  ['.members-grid .member-card', '.gallery-grid .gallery-item'
+  ].forEach(function(sel) {
+    document.querySelectorAll(sel).forEach(function(el, i) {
+      el.style.setProperty('--stagger', (i * 0.08) + 's');
+    });
+  });
+
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('visible');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(function(el) { io.observe(el); });
+
+  // Load + autoplay (muted) each video when it scrolls into view
+  var videoIO = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (!e.isIntersecting) return;
+      var frame = e.target.querySelector('iframe');
+      if (frame && !frame.src) frame.src = frame.dataset.src;
+      videoIO.unobserve(e.target);
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.video-embed').forEach(function(el) { videoIO.observe(el); });
+
+  var eyebrowIO = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('line-visible');
+      eyebrowIO.unobserve(e.target);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.section-eyebrow').forEach(function(el) { eyebrowIO.observe(el); });
+
+  var heroLogo = document.querySelector('.hero-logo');
+  var heroSection = document.querySelector('.hero-inner');
+  // hero-inner is the background container
+  var mx = 0, my = 0, cx = 0, cy = 0, raf = false;
+  if (heroSection && heroLogo) {
+    heroSection.addEventListener('mousemove', function(e) {
+      mx = (e.clientX / window.innerWidth  - 0.5) * 18;
+      my = (e.clientY / window.innerHeight - 0.5) * 14;
+      if (!raf) { raf = true; requestAnimationFrame(tick); }
+    });
+    heroSection.addEventListener('mouseleave', function() { mx = 0; my = 0; });
+  }
+  function tick() {
+    cx += (mx - cx) * 0.08;
+    cy += (my - cy) * 0.08;
+    heroLogo.style.transform = 'translate(' + cx + 'px, ' + cy + 'px)';
+    if (Math.abs(mx - cx) > 0.05 || Math.abs(my - cy) > 0.05) {
+      requestAnimationFrame(tick);
+    } else { raf = false; }
+  }
+</script>
+</body>
+</html>
