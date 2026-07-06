@@ -332,55 +332,55 @@
     .members-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
       margin-top: 3rem;
-      border: 1px solid var(--border);
-      gap: 1px;
-      background: var(--border);
     }
     .member-card {
-      background: var(--bg);
-      padding: 2.25rem 1.25rem 2rem;
-      text-align: center;
-      transition: background 0.25s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .member-card:hover { background: var(--surface-2); transform: translateY(-4px); }
-    .member-avatar {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      background: var(--surface-2);
-      border: 1px solid var(--border-light);
-      margin: 0 auto 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: relative;
+      aspect-ratio: 11 / 20;
       overflow: hidden;
-      font-family: var(--f-display);
-      font-size: 1.8rem;
-      color: var(--silver-dark);
-      transition: border-color 0.3s;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .member-card:hover .member-avatar { border-color: var(--silver-mid); }
-    .member-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .member-card:hover { transform: translateY(-5px); }
+    .member-card img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(15%);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+    }
+    .member-card:hover img { transform: scale(1.06); filter: grayscale(0%); }
+    .member-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 26%, transparent 55%);
+      pointer-events: none;
+    }
+    .member-info {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 1rem 1rem 1.15rem;
+      z-index: 1;
+    }
     .member-name {
-      font-family: var(--f-sub);
-      font-weight: 600;
-      font-size: 0.8rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--white);
-      line-height: 1.35;
-      margin-bottom: 0.85rem;
+      font-family: var(--f-display);
+      font-size: clamp(1.35rem, 1.9vw, 1.9rem);
+      letter-spacing: 0.05em;
+      line-height: 1.05;
+      color: #ffffff;
     }
     .member-instrument {
       display: inline-block;
       font-family: var(--f-sub);
       font-size: 0.62rem;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--silver-mid);
-      padding: 0.2rem 0.55rem;
-      border: 1px solid var(--border-light);
-      line-height: 1.6;
+      color: rgba(255,255,255,0.75);
+      border-top: 1px solid rgba(255,255,255,0.35);
+      padding-top: 0.4rem;
+      margin-top: 0.5rem;
     }
 
     /* GALLERY */
@@ -537,7 +537,6 @@
       .contact-socials { gap: 2rem; }
     }
     @media (max-width: 400px) {
-      .members-grid { grid-template-columns: 1fr; }
       .gallery-grid { columns: 1; }
     }
   </style>
@@ -631,48 +630,58 @@
     <div class="members-grid">
 
       <div class="member-card fade-up">
-        <div class="member-avatar"><img src="photos/member_03.jpg" alt="Hjálmar"></div>
-        <div class="member-name">Hjálmar</div>
-        <span class="member-instrument">
-          <span class="is-text">Söngvari · Gítar</span>
-          <span class="en-text">Vocals · Guitar</span>
-        </span>
+        <img src="photos/panel_03.jpg" alt="Hjálmar">
+        <div class="member-info">
+          <div class="member-name">Hjálmar</div>
+          <span class="member-instrument">
+            <span class="is-text">Söngvari · Gítar</span>
+            <span class="en-text">Vocals · Guitar</span>
+          </span>
+        </div>
       </div>
 
       <div class="member-card fade-up">
-        <div class="member-avatar"><img src="photos/member_02.jpg" alt="Eyþór Ingi"></div>
-        <div class="member-name">Eyþór Ingi</div>
-        <span class="member-instrument">
-          <span class="is-text">Rafgítar</span>
-          <span class="en-text">Electric Guitar</span>
-        </span>
+        <img src="photos/panel_02.jpg" alt="Eyþór Ingi">
+        <div class="member-info">
+          <div class="member-name">Eyþór Ingi</div>
+          <span class="member-instrument">
+            <span class="is-text">Rafgítar</span>
+            <span class="en-text">Electric Guitar</span>
+          </span>
+        </div>
       </div>
 
       <div class="member-card fade-up">
-        <div class="member-avatar"><img src="photos/member_01.jpg" alt="Hörður Alexander"></div>
-        <div class="member-name">Hörður Alexander</div>
-        <span class="member-instrument">
-          <span class="is-text">Hljómborð</span>
-          <span class="en-text">Keys</span>
-        </span>
+        <img src="photos/panel_01.jpg" alt="Hörður Alexander">
+        <div class="member-info">
+          <div class="member-name">Hörður Alexander</div>
+          <span class="member-instrument">
+            <span class="is-text">Hljómborð</span>
+            <span class="en-text">Keys</span>
+          </span>
+        </div>
       </div>
 
       <div class="member-card fade-up">
-        <div class="member-avatar"><img src="photos/member_05.jpg" alt="Ragnar Þorri"></div>
-        <div class="member-name">Ragnar Þorri</div>
-        <span class="member-instrument">
-          <span class="is-text">Bassagítar</span>
-          <span class="en-text">Bass Guitar</span>
-        </span>
+        <img src="photos/panel_05.jpg" alt="Ragnar Þorri">
+        <div class="member-info">
+          <div class="member-name">Ragnar Þorri</div>
+          <span class="member-instrument">
+            <span class="is-text">Bassagítar</span>
+            <span class="en-text">Bass Guitar</span>
+          </span>
+        </div>
       </div>
 
       <div class="member-card fade-up">
-        <div class="member-avatar"><img src="photos/member_04.jpg" alt="Guðmundur Bjarnason"></div>
-        <div class="member-name">Guðmundur Bjarnason</div>
-        <span class="member-instrument">
-          <span class="is-text">Trommur</span>
-          <span class="en-text">Drums</span>
-        </span>
+        <img src="photos/panel_04.jpg" alt="Guðmundur Bjarnason">
+        <div class="member-info">
+          <div class="member-name">Guðmundur Bjarnason</div>
+          <span class="member-instrument">
+            <span class="is-text">Trommur</span>
+            <span class="en-text">Drums</span>
+          </span>
+        </div>
       </div>
 
     </div>
